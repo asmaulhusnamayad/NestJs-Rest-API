@@ -12,7 +12,7 @@ export class UserController {
     constructor(private userService : UserService){}
     
     @Get('me')
-    getme(@GetUser('id')user : User ) {
+    getme(@GetUser() user : User ) {
 
         return user;
     }

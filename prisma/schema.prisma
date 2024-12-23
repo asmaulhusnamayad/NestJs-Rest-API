@@ -18,29 +18,64 @@ model User {
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
 
-  email String @unique 
+  name String
+
+  email String @unique
 
   hash String
 
-  firstName String?
-  lastName  String?
+  username String
 
-  bookmarks Bookmark[]
+  address String
 
-  @@map("users")
+  phoneNumber String
 }
 
-model Bookmark {
-  id       Int      @id @default(autoincrement())
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+model student {
+  id Int @unique @default(autoincrement())
 
-  title       String
-  description String?
-  link        String
+  name String
 
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
+  email String
 
-  @@map("bookmarks")
+  username String
+
+  password String
+
+  address String
+
+  phonrNumber String
+
+  couse course[]
+}
+
+model teacher {
+  id   Int    @unique @default(autoincrement())
+  name String
+
+  email String
+
+  username String
+
+  password String
+
+  address String
+
+  phonrNumber String
+  couse       course[]
+}
+
+model course {
+  id Int @unique @default(autoincrement())
+
+  student_id Int
+
+  teacher_id Int
+
+  title String
+
+  description String
+
+  student student @relation(fields: [student_id], references: [id])
+  teacher teacher @relation(fields: [teacher_id], references: [id])
 }

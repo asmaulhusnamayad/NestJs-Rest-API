@@ -7,6 +7,7 @@ import { Any } from "typeorm";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
+import { signinDto } from "src/dto/signin.dto";
 
 
 @Injectable({})
@@ -14,11 +15,11 @@ export class AuthService {
     constructor(private prisma: PrismaService, private jwt: JwtService, private config: ConfigService) {
 
     }
-    async signin(dto: auth) {
+    async signin(dto: signinDto) {
         //find the user by email
         const user = this.prisma.user.findUnique({
             where: {
-                email: dto.Email
+                email: dto.email
             }
         });
         //if user doesnt exist 
@@ -26,7 +27,7 @@ export class AuthService {
         //compare passsword
         const pwMatches = await argon.verify(
             (await user).hash,
-            dto.Password
+            dto.hash
         );
         if (!pwMatches) {
             throw new ForbiddenException(
@@ -44,8 +45,12 @@ export class AuthService {
         try {
             const user = await this.prisma.user.create({
                 data: {
+                    name :dto.name,
                     email: dto.Email,
                     hash,
+                    username : dto.username,
+                    address : dto.address,
+                    phoneNumber : dto.phoneNumber
 
 
                 },
